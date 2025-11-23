@@ -34,8 +34,7 @@ class Store {
     return rows[0];
   }
 
-  // Get all stores with filters
-  // Get all stores with filters
+
   static async findAllWithFilters(filters = {}) {
     let query = `
     SELECT 
