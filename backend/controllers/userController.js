@@ -95,7 +95,7 @@ export const rateStore = async (req, res, next) => {
   }
 };
 
-r
+
 export const getMyRatings = async (req, res, next) => {
   try {
     const userId = req.user.id;
