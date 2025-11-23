@@ -21,7 +21,7 @@ const app = express();
 
 const API = process.env.FRONTEND_URL;
 const corsOptions = {
-origin: [`${API}`, 'http://localhost:3000'],
+origin: ['https://roxiler-systems-assignment-nov.vercel.app', 'http://localhost:3000'],
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
