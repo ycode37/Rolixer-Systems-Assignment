@@ -2,9 +2,6 @@ import Store from '../models/Store.js';
 import Rating from '../models/Rating.js';
 import { pool } from '../config/db.js';
 
-// @desc    Get store owner dashboard data
-// @route   GET /api/store-owner/dashboard
-// @access  Private/Store Owner
 export const getDashboard = async (req, res, next) => {
   try {
     const ownerId = req.user.id;
@@ -73,9 +70,7 @@ export const getDashboard = async (req, res, next) => {
   }
 };
 
-// @desc    Get store details
-// @route   GET /api/store-owner/store
-// @access  Private/Store Owner
+
 export const getStore = async (req, res, next) => {
   try {
     const ownerId = req.user.id;
@@ -108,9 +103,7 @@ export const getStore = async (req, res, next) => {
   }
 };
 
-// @desc    Get all ratings for store owner's store
-// @route   GET /api/store-owner/ratings
-// @access  Private/Store Owner
+
 export const getRatings = async (req, res, next) => {
   try {
     const ownerId = req.user.id;
