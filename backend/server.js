@@ -18,8 +18,10 @@ process.setMaxListeners(15);
 const app = express();
 
 // CORS Configuration - MUST BE BEFORE OTHER MIDDLEWARE
+
+const API = process.env.FRONTEND_URL;
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://localhost:3000'], // Allow multiple origins
+  origin: [`${API}`, 'http://localhost:3000'], // Allow multiple origins
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -54,7 +56,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Start server
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT;
 
 const startServer = async () => {
   try {
@@ -67,10 +69,10 @@ const startServer = async () => {
     // Start listening
     app.listen(PORT, () => {
       console.log(
-        `🚀 Server running on port ${PORT} in ${process.env.NODE_ENV} mode`
+        `Server running on port ${PORT} in ${process.env.NODE_ENV} mode`
       );
-      console.log(`📡 API available at http://localhost:${PORT}/api`);
-      console.log(`🌐 CORS enabled for http://localhost:5173`);
+      console.log(` API available at http://localhost:${PORT}/api`);
+      console.log(` CORS enabled for http://localhost:5173`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
