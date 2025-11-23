@@ -12,7 +12,7 @@ const retryConnection = async (connectionFn, maxRetries = 3, delay = 2000) => {
       if (i === maxRetries - 1) throw error;
       console.log(`⚠️  Connection attempt ${i + 1} failed, retrying in ${delay}ms...`);
       await new Promise(resolve => setTimeout(resolve, delay));
-      delay *= 2; // Exponential backoff
+      delay *= 2; 
     }
   }
 };
@@ -20,16 +20,16 @@ const retryConnection = async (connectionFn, maxRetries = 3, delay = 2000) => {
 // Create connection pool without database first
 const createDatabaseIfNotExists = async () => {
   try {
-    console.log(`🔌 Attempting to connect to ${process.env.DB_HOST}:${process.env.DB_PORT || 3306}...`);
+    console.log(`Attempting to connect to ${process.env.DB_HOST}:${process.env.DB_PORT || 3306}...`);
     
-    // Connect without specifying database
+
     const connection = await retryConnection(async () => {
       return await mysql.createConnection({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         port: parseInt(process.env.DB_PORT) || 3306,
-        connectTimeout: 120000, // 120 seconds for cloud connections
+        connectTimeout: 120000, 
         ssl: {
           rejectUnauthorized: false
         }
@@ -40,11 +40,11 @@ const createDatabaseIfNotExists = async () => {
     await connection.query(
       `CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME}`
     );
-    console.log(`✅ Database '${process.env.DB_NAME}' is ready`);
+    console.log(`Database '${process.env.DB_NAME}' is ready`);
 
     await connection.end();
   } catch (error) {
-    console.error('❌ Error creating database:', error.message);
+    console.error('Error creating database:', error.message);
     console.error(`Connection details: Host: ${process.env.DB_HOST}, Port: ${process.env.DB_PORT || 3306}, User: ${process.env.DB_USER}`);
     throw error;
   }
@@ -60,7 +60,7 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  connectTimeout: 120000, // 120 seconds - increased for cloud connections
+  connectTimeout: 120000, 
   ssl: {
     rejectUnauthorized: false
   },
@@ -71,25 +71,25 @@ const pool = mysql.createPool({
 // Test database connection
 const testConnection = async () => {
   try {
-    // First create database if needed
+
     await createDatabaseIfNotExists();
 
-    // Test pool connection with retry
+
     await retryConnection(async () => {
       const connection = await pool.getConnection();
       await connection.ping(); // Test the connection
-      console.log('✅ MySQL Database connected successfully');
+      console.log('MySQL Database connected successfully');
       connection.release();
     });
   } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+    console.error('Database connection failed:', error.message);
     console.error(`Connection details: Host: ${process.env.DB_HOST}, Port: ${process.env.DB_PORT || 3306}, Database: ${process.env.DB_NAME}, User: ${process.env.DB_USER}`);
     console.error('Full error:', error);
-    console.error('\n💡 Troubleshooting tips:');
-    console.error('   1. Verify your DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME in .env file');
-    console.error('   2. Check if your Aiven service is running and accessible');
-    console.error('   3. Verify firewall/network settings allow connections to the Aiven host');
-    console.error('   4. Check if your IP is whitelisted in Aiven (if required)');
+    console.error('\n Troubleshooting tips:');
+    // console.error('   1. Verify your DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, and DB_NAME in .env file');
+    // console.error('   2. Check if your Aiven service is running and accessible');
+    // console.error('   3. Verify firewall/network settings allow connections to the Aiven host');
+    // console.error('   4. Check if your IP is whitelisted in Aiven (if required)');
     process.exit(1);
   }
 };
@@ -150,10 +150,10 @@ const initializeDatabase = async () => {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
-    console.log('✅ Database tables initialized successfully');
+    console.log('Database tables initialized successfully');
     connection.release();
   } catch (error) {
-    console.error('❌ Database initialization failed:', error.message);
+    console.error('Database initialization failed:', error.message);
     throw error;
   }
 };
