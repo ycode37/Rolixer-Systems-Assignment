@@ -47,7 +47,6 @@ const RatingsList = () => {
   const applyFiltersAndSort = () => {
     let filtered = [...ratings];
 
-    // Apply filters
     if (filters.storeName) {
       filtered = filtered.filter((rating) =>
         rating.store_name
@@ -76,7 +75,6 @@ const RatingsList = () => {
       );
     }
 
-    // Apply sorting
     filtered.sort((a, b) => {
       let aValue, bValue;
 
@@ -142,12 +140,12 @@ const RatingsList = () => {
 
   const getSortIcon = (field) => {
     if (sortConfig.sortBy !== field) {
-      return <span className="text-gray-400 ml-1">⇅</span>;
+      return <span className="ml-1 opacity-50">⇅</span>;
     }
     return sortConfig.sortOrder === 'ASC' ? (
-      <span className="text-white ml-1">↑</span>
+      <span className="ml-1">↑</span>
     ) : (
-      <span className="text-white ml-1">↓</span>
+      <span className="ml-1">↓</span>
     );
   };
 
@@ -155,9 +153,7 @@ const RatingsList = () => {
     return [1, 2, 3, 4, 5].map((star) => (
       <span
         key={star}
-        className={`text-2xl ${
-          star <= rating ? 'text-yellow-400' : 'text-gray-300'
-        }`}
+        className={star <= rating ? 'text-yellow-400' : 'text-gray-300'}
       >
         ★
       </span>
@@ -166,225 +162,184 @@ const RatingsList = () => {
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
       month: 'short',
       day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+      year: 'numeric',
     });
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-600 via-orange-600 to-yellow-500">
-        <div className="bg-white p-8 rounded-2xl shadow-2xl">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-yellow-600 mx-auto"></div>
-          <p className="mt-4 text-gray-700 font-semibold">Loading ratings...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading ratings...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-600 via-orange-600 to-yellow-500">
-      <nav className="bg-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate('/admin-dashboard')}
-                className="text-yellow-600 hover:text-yellow-800 font-semibold flex items-center"
+                className="text-gray-600 hover:text-gray-900"
               >
-                <span className="text-2xl mr-2">←</span> Back
+                ← Back
               </button>
-              <h1 className="text-2xl font-bold text-yellow-600">
+              <h1 className="text-xl font-semibold text-gray-900">
                 All Ratings
               </h1>
             </div>
-            <span className="text-gray-600">
-              Showing:{' '}
-              <span className="font-bold text-yellow-600">
-                {filteredRatings.length}
-              </span>{' '}
-              of{' '}
-              <span className="font-bold text-yellow-600">
-                {ratings.length}
-              </span>
+            <span className="text-sm text-gray-500">
+              {filteredRatings.length} of {ratings.length} ratings
             </span>
           </div>
         </div>
-      </nav>
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+          <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg">
             {error}
           </div>
         )}
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Filters & Search
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Store Name
-              </label>
-              <input
-                type="text"
-                name="storeName"
-                value={filters.storeName}
-                onChange={handleFilterChange}
-                placeholder="Search by store name"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                User Name
-              </label>
-              <input
-                type="text"
-                name="userName"
-                value={filters.userName}
-                onChange={handleFilterChange}
-                placeholder="Search by user name"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rating Value
-              </label>
-              <select
-                name="rating"
-                value={filters.rating}
-                onChange={handleFilterChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-              >
-                <option value="">All Ratings</option>
-                <option value="5">5 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="2">2 Stars</option>
-                <option value="1">1 Star</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Comment
-              </label>
-              <input
-                type="text"
-                name="comment"
-                value={filters.comment}
-                onChange={handleFilterChange}
-                placeholder="Search in comments"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
-              />
-            </div>
+        <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input
+              type="text"
+              name="storeName"
+              value={filters.storeName}
+              onChange={handleFilterChange}
+              placeholder="Filter by store..."
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            />
+            <input
+              type="text"
+              name="userName"
+              value={filters.userName}
+              onChange={handleFilterChange}
+              placeholder="Filter by user..."
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            />
+            <select
+              name="rating"
+              value={filters.rating}
+              onChange={handleFilterChange}
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            >
+              <option value="">All ratings</option>
+              <option value="5">5 stars</option>
+              <option value="4">4 stars</option>
+              <option value="3">3 stars</option>
+              <option value="2">2 stars</option>
+              <option value="1">1 star</option>
+            </select>
+            <input
+              type="text"
+              name="comment"
+              value={filters.comment}
+              onChange={handleFilterChange}
+              placeholder="Search comments..."
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            />
           </div>
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600">
-              {filteredRatings.length !== ratings.length && (
-                <span className="font-semibold text-yellow-600">
-                  Filtered: {filteredRatings.length} of {ratings.length} ratings
-                </span>
-              )}
-            </p>
-            {(filters.storeName ||
-              filters.userName ||
-              filters.rating ||
-              filters.comment) && (
+          {(filters.storeName ||
+            filters.userName ||
+            filters.rating ||
+            filters.comment) && (
+            <div className="mt-4 flex justify-between items-center">
+              <span className="text-sm text-gray-600">
+                Showing {filteredRatings.length} filtered results
+              </span>
               <button
                 onClick={handleClearFilters}
-                className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition"
+                className="text-sm text-gray-600 hover:text-gray-900"
               >
-                Clear All Filters
+                Clear filters
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-          <div className="hidden md:block overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gradient-to-r from-yellow-500 to-orange-500">
+        {/* Ratings Table */}
+        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y">
+              <thead className="bg-gray-50">
                 <tr>
                   <th
                     onClick={() => handleSort('id')}
-                    className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-yellow-600"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase cursor-pointer hover:bg-gray-100"
                   >
                     ID {getSortIcon('id')}
                   </th>
                   <th
                     onClick={() => handleSort('store_name')}
-                    className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-yellow-600"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase cursor-pointer hover:bg-gray-100"
                   >
-                    Store Name {getSortIcon('store_name')}
+                    Store {getSortIcon('store_name')}
                   </th>
                   <th
                     onClick={() => handleSort('user_name')}
-                    className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-yellow-600"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase cursor-pointer hover:bg-gray-100"
                   >
-                    User Name {getSortIcon('user_name')}
+                    User {getSortIcon('user_name')}
                   </th>
                   <th
                     onClick={() => handleSort('rating')}
-                    className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-yellow-600"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase cursor-pointer hover:bg-gray-100"
                   >
                     Rating {getSortIcon('rating')}
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">
                     Comment
                   </th>
                   <th
                     onClick={() => handleSort('created_at')}
-                    className="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-yellow-600"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase cursor-pointer hover:bg-gray-100"
                   >
                     Date {getSortIcon('created_at')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredRatings.map((rating, index) => (
-                  <tr
-                    key={rating.id}
-                    className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <tbody className="divide-y">
+                {filteredRatings.map((rating) => (
+                  <tr key={rating.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm text-gray-900">
                       #{rating.id}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
-                        {rating.store_name}
-                      </div>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      {rating.store_name}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {rating.user_name}
-                      </div>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {rating.user_name}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       <div className="flex items-center space-x-2">
-                        <span className="text-lg font-bold text-orange-600">
+                        <span className="text-sm font-semibold text-gray-900">
                           {rating.rating}
                         </span>
-                        <div className="flex">{renderStars(rating.rating)}</div>
+                        <div className="flex text-sm">
+                          {renderStars(rating.rating)}
+                        </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900 max-w-md">
+                    <td className="px-6 py-4 text-sm text-gray-600 max-w-xs">
                       {rating.comment ? (
-                        <span className="line-clamp-2" title={rating.comment}>
-                          {rating.comment}
-                        </span>
+                        <span className="line-clamp-2">{rating.comment}</span>
                       ) : (
                         <span className="text-gray-400 italic">No comment</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 text-sm text-gray-500">
                       {formatDate(rating.created_at)}
                     </td>
                   </tr>
@@ -393,131 +348,57 @@ const RatingsList = () => {
             </table>
           </div>
 
-          {/* Mobile Card View */}
-          <div className="md:hidden">
-            <div className="p-4 bg-gray-50 border-b border-gray-200">
-              <p className="text-sm text-gray-600">
-                Sorting by:{' '}
-                <span className="font-semibold">
-                  {sortConfig.sortBy.replace('_', ' ')}
-                </span>
-                <span className="ml-2">
-                  (
-                  {sortConfig.sortOrder === 'ASC'
-                    ? 'Ascending ↑'
-                    : 'Descending ↓'}
-                  )
-                </span>
-              </p>
-            </div>
-            {filteredRatings.map((rating) => (
-              <div
-                key={rating.id}
-                className="border-b border-gray-200 p-6 hover:bg-gray-50"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {rating.store_name}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      by {rating.user_name}
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <span className="text-xl font-bold text-orange-600">
-                      {rating.rating}
-                    </span>
-                    <span className="text-yellow-400 text-xl">★</span>
-                  </div>
-                </div>
-                <div className="flex mb-2">{renderStars(rating.rating)}</div>
-                {rating.comment && (
-                  <p className="text-sm text-gray-700 mb-2 italic bg-gray-50 p-3 rounded-lg">
-                    "{rating.comment}"
-                  </p>
-                )}
-                <div className="flex justify-between items-center text-xs text-gray-500 mt-3">
-                  <span>ID: #{rating.id}</span>
-                  <span>{formatDate(rating.created_at)}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {filteredRatings.length === 0 && !error && (
+          {filteredRatings.length === 0 && (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">⭐</div>
-              <p className="text-gray-500 text-lg">
+              <p className="text-gray-500">
                 {ratings.length === 0
-                  ? 'No ratings submitted yet'
+                  ? 'No ratings yet'
                   : 'No ratings match your filters'}
               </p>
               {ratings.length > 0 && (
                 <button
                   onClick={handleClearFilters}
-                  className="mt-4 text-yellow-600 hover:text-yellow-800 font-semibold"
+                  className="mt-4 text-sm text-yellow-600 hover:text-yellow-700"
                 >
-                  Clear filters to see all ratings
+                  Clear filters
                 </button>
               )}
             </div>
           )}
         </div>
 
-        {/* Summary Statistics */}
-        {/* {filteredRatings.length > 0 && (
-          <div className="mt-6 bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Rating Statistics
+        {/* Stats */}
+        {filteredRatings.length > 0 && (
+          <div className="mt-6 bg-white rounded-lg shadow-sm border p-6">
+            <h3 className="text-sm font-medium text-gray-900 mb-4">
+              Quick Stats
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {[5, 4, 3, 2, 1].map((star) => {
-                const count = filteredRatings.filter(
-                  (r) => r.rating === star
-                ).length;
-                const percentage = (
-                  (count / filteredRatings.length) *
-                  100
-                ).toFixed(1);
-                return (
-                  <div key={star} className="text-center">
-                    <div className="text-3xl mb-2">{star}★</div>
-                    <div className="text-2xl font-bold text-orange-600">
-                      {count}
-                    </div>
-                    <div className="text-sm text-gray-500">{percentage}%</div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="flex justify-around text-center">
-                <div>
-                  <p className="text-sm text-gray-600">Average Rating</p>
-                  <p className="text-2xl font-bold text-orange-600">
-                    {(
-                      filteredRatings.reduce((sum, r) => sum + r.rating, 0) /
-                      filteredRatings.length
-                    ).toFixed(2)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Total Ratings</p>
-                  <p className="text-2xl font-bold text-orange-600">
-                    {filteredRatings.length}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">With Comments</p>
-                  <p className="text-2xl font-bold text-orange-600">
-                    {filteredRatings.filter((r) => r.comment).length}
-                  </p>
-                </div>
+            <div className="grid grid-cols-3 gap-6">
+              <div>
+                <p className="text-xs text-gray-500">Average Rating</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1">
+                  {(
+                    filteredRatings.reduce((sum, r) => sum + r.rating, 0) /
+                    filteredRatings.length
+                  ).toFixed(1)}
+                  <span className="text-base text-gray-400 ml-1">/ 5</span>
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">Total Ratings</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1">
+                  {filteredRatings.length}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">With Comments</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1">
+                  {filteredRatings.filter((r) => r.comment).length}
+                </p>
               </div>
             </div>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
